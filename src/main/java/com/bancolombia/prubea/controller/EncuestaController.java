@@ -53,7 +53,7 @@ public class EncuestaController {
     @ApiOperation(value = "Busca una encuesta por su id y la trae con sus preguntas")
     @GetMapping("/get-all-with-questions/{idSurvey}")
     public ResponseEntity<ControllerDto> listSurveyWithQuestions(
-            @ApiParam(example = "bef0a6b3-b6f6-442e-bae5-75a7f11b7571",
+            @ApiParam(example = "9eabdfd8-5fb8-4907-b0ee-05540b9fa1a5",
                     required = true)@PathVariable(name = "idSurvey") String idSurvey){
         ServiceResponseDto serviceResponseDto = encuestaService.listFullSurvey(idSurvey);
         ControllerDto controllerDto = new ControllerDto();

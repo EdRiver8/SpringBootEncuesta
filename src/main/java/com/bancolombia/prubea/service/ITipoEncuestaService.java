@@ -4,5 +4,5 @@ import com.bancolombia.prubea.dto.ServiceResponseDto;
 
 
 public interface ITipoEncuestaService {
-    public ServiceResponseDto getlistTypeSurvey();
+    ServiceResponseDto getlistTypeSurvey();
 }

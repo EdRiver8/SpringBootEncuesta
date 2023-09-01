@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -26,6 +27,7 @@ public class PreguntaEDto {
     @ApiModelProperty(example = "Muchas Opciones")
     private String options;
     private TipoPreguntaDto questionTypeDto;
+    private Set<PreguntaE> answersDto;
 //    private EncuestaDto surveyDto; // permite mostrar la encuesta desde la preguntaDto
 
     /**
