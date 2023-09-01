@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.tablesorter.min.js"></script>
+<script src="js/Chart.min.js"></script>
+<script src="js/moment.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"/>
+<link rel="stylesheet" href="css/cucumber.css" type="text/css"/>
+<link rel="stylesheet" href="css/font-awesome.min.css"/>
+<link rel="shortcut icon" href="images/favicon.png"/>
+
+<script>
+$(document).ready(function() {
+    // this will tell tablesorter to try looking for the data-value attribute
+    // if present, it'll sort by that instead
+    // otherwise, it'll sort by the text content of the table cell
+    $("#tablesorter").tablesorter({
+        textAttribute: 'data-value',
+        // ignores the first row of the header, the 'scenario', 'steps', since
+        // sorting those doesn't make sense
+        selectorHeaders: '> thead tr:not(.dont-sort) th',
+        // use a stable sort
+        sortStable: true
+    });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<title>Cucumber Reports  - Feature: karate/test_api.feature</title>
+
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navigation">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse">
+      <p class="navbar-text navbar-left">Cucumber Report</p>
+      <ul class="nav navbar-nav navbar-right">
+        <li role="presentation" ><a href="overview-features.html">Features</a></li>
+        <li role="presentation" ><a href="overview-tags.html">Tags</a></li>
+        <li role="presentation" ><a href="overview-steps.html">Steps</a></li>
+        <li role="presentation" ><a href="overview-failures.html">Failures</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container-fluid">
+  <div class="col-md-5 col-md-offset-1">
+
+<table class="table table-bordered" id="build-info">
+  <thead>
+    <tr>
+      <th>Project</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="info">
+      <td>demo</td>
+      <td>29 Aug 2023, 14:49</td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+  <div class="col-md-3 col-md-offset-2">
+  </div>
+</div>
+
+
+<div id="report-lead" class="container-fluid">
+  <div class="col-md-10 col-md-offset-1">
+    <h2>Feature Report</h2>
+  </div>
+</div>
+
+
+<div class="container-fluid" id="report">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <table class="stats-table">
+
+
+<thead>
+  <tr class="header dont-sort">
+      <th></th>
+    <th colspan="6">Steps</th>
+    <th colspan="3">Scenarios</th>
+    <th colspan="2">Features</th>
+  </tr>
+  <tr>
+    <th>Feature</th>
+    <th class="passed">Passed</th>
+    <th class="failed">Failed</th>
+    <th class="skipped">Skipped</th>
+    <th class="pending">Pending</th>
+    <th class="undefined">Undefined</th>
+    <th class="total">Total</th>
+
+    <th class="passed">Passed</th>
+    <th class="failed">Failed</th>
+    <th class="total">Total</th>
+
+    <th>Duration</th>
+    <th>Status</th>
+  </tr>
+</thead>
+
+
+        <tbody>
+        <tr>
+          <td class="tagname">karate/test_api.feature</td>
+          <td      class="passed"    >5</td>
+          <td >0</td>
+          <td >0</td>
+          <td >0</td>
+          <td >0</td>
+          <td class="total">5</td>
+
+          <td  class="passed"    >1</td>
+          <td >0</td>
+          <td class="total">1</td>
+
+          <td class="duration" data-value="805881000">0.805</td>
+          <td class="passed">Passed</td>
+        </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-1 col-md-offset-10">
+      <i class="fa fa-chevron-circle-down fa-2x collapsable-control"
+        onClick="javascript:$('#report .collapsable-details').collapse('show')"></i>
+      <i class="fa fa-chevron-circle-up fa-2x collapsable-control"
+        onClick="javascript:$('#report .collapsable-details').collapse('hide')"></i>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid" id="report">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="feature">
+
+<div class="tags indention">
+</div>
+
+
+<div class="brief passed">
+  <span class="keyword indention">Feature</span>
+  <span class="name">karate/test_api.feature</span>
+
+
+</div>
+
+        <div class="description indention">Validate api tests
+Yo... Como... Para...</div>
+
+        <div class="elements inner-level">
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.805</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-1">
+
+<div class="brief passed">
+  <span class="keyword indention">Scenario</span>
+  <span class="name">Validar get de api rick and morty para un personaje sea exitosa</span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-1" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-2">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-2" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-Given passed">
+  <span class="keyword indention">Given</span>
+  <span class="name">url 'https://rickandmortyapi.com/api/character/2'</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+  <div class="inner-level">
+    <div class="docstring indention">
+      <div data-toggle="collapse" class="collapsable-control" data-target="#msg-3">
+          <a>Doc string</a>
+      </div>
+      <div id="msg-3" class="collapse collapsable-details">
+        <pre>14:49:55.491 karate.env system property was: null 
+</pre>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-When passed">
+  <span class="keyword indention">When</span>
+  <span class="name">method get</span>
+
+  <span class="lead-duration duration">0.783</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+  <div class="inner-level">
+    <div class="docstring indention">
+      <div data-toggle="collapse" class="collapsable-control" data-target="#msg-4">
+          <a>Doc string</a>
+      </div>
+      <div id="msg-4" class="collapse collapsable-details">
+        <pre>14:49:55.672 request:
+1 &gt; GET https://rickandmortyapi.com/api/character/2
+1 &gt; Host: rickandmortyapi.com
+1 &gt; Connection: Keep-Alive
+1 &gt; User-Agent: Apache-HttpClient/4.5.13 (Java/11.0.12)
+1 &gt; Accept-Encoding: gzip,deflate
+
+
+14:49:56.302 response time in milliseconds: 603
+1 &lt; 200
+1 &lt; Access-Control-Allow-Origin: *
+1 &lt; Age: 7584
+1 &lt; Cache-Control: max-age=259200
+1 &lt; Content-Type: application/json; charset=utf-8
+1 &lt; Date: Tue, 29 Aug 2023 19:49:56 GMT
+1 &lt; Etag: W/&quot;a6e-zQHAPIKFfD+Wv+P+4aCju24Mapw&quot;
+1 &lt; Expires: Fri, 01 Sep 2023 17:43:32 GMT
+1 &lt; Server: Netlify
+1 &lt; Strict-Transport-Security: max-age=31536000
+1 &lt; Vary: Accept-Encoding
+1 &lt; X-Nf-Request-Id: 01H91DGWV0479SN0PF588TACRC
+1 &lt; X-Powered-By: Express
+{&quot;image&quot;:&quot;https:\/\/rickandmortyapi.com\/api\/character\/avatar\/2.jpeg&quot;,&quot;gender&quot;:&quot;Male&quot;,&quot;species&quot;:&quot;Human&quot;,&quot;created&quot;:&quot;2017-11-04T18:50:21.651Z&quot;,&quot;origin&quot;:{&quot;name&quot;:&quot;unknown&quot;,&quot;url&quot;:&quot;&quot;},&quot;name&quot;:&quot;Morty Smith&quot;,&quot;location&quot;:{&quot;name&quot;:&quot;Citadel of Ricks&quot;,&quot;url&quot;:&quot;https:\/\/rickandmortyapi.com\/api\/location\/3&quot;},&quot;episode&quot;:[&quot;https:\/\/rickandmortyapi.com\/api\/episode\/1&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/2&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/3&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/4&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/5&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/6&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/7&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/8&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/9&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/10&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/11&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/12&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/13&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/14&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/15&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/16&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/17&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/18&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/19&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/20&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/21&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/22&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/23&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/24&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/25&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/26&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/27&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/28&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/29&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/30&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/31&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/32&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/33&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/34&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/35&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/36&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/37&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/38&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/39&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/40&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/41&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/42&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/43&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/44&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/45&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/46&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/47&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/48&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/49&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/50&quot;,&quot;https:\/\/rickandmortyapi.com\/api\/episode\/51&quot;],&quot;id&quot;:2,&quot;type&quot;:&quot;&quot;,&quot;url&quot;:&quot;https:\/\/rickandmortyapi.com\/api\/character\/2&quot;,&quot;status&quot;:&quot;Alive&quot;}
+</pre>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Then passed">
+  <span class="keyword indention">Then</span>
+  <span class="name">status 200</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-And passed">
+  <span class="keyword indention">And</span>
+  <span class="name">match response != 'Error'</span>
+
+  <span class="lead-duration duration">0.007</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-And passed">
+  <span class="keyword indention">And</span>
+  <span class="name">match response contains {gender: #notnull}</span>
+
+  <span class="lead-duration duration">0.014</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-1 col-md-offset-10">
+      <i class="fa fa-chevron-circle-down fa-2x collapsable-control"
+        onClick="javascript:$('#report .collapsable-details').collapse('show')"></i>
+      <i class="fa fa-chevron-circle-up fa-2x collapsable-control"
+        onClick="javascript:$('#report .collapsable-details').collapse('hide')"></i>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+<nav class="navbar navbar-default" id="footer">
+  <div class="container-fluid">
+    <p class="navbar-text navbar-right">
+        <small>generate Cucumber HTML reports via:&nbsp;</small>
+        <a class="navbar-link" href="https://github.com/jenkinsci/cucumber-reports-plugin">Jenkins Plugin</a> |
+        <a class="navbar-link" href="https://github.com/damianszczepanik/cucumber-reporting">Standalone</a> |
+        <a class="navbar-link" href="https://github.com/damianszczepanik/cucumber-sandwich">Sandwich</a> |
+        <a class="navbar-link" href="https://github.com/damianszczepanik/maven-cucumber-reporting">Maven</a>
+        &nbsp;&nbsp;
+    </p>
+  </div>
+</nav>
+
+</body>
+</html>
