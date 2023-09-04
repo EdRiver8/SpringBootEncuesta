@@ -35,11 +35,11 @@ public class PreguntaE {
     @JoinColumn(name = "id_tipo_pregunta")
     private TipoPregunta tipoPregunta;
 
-    @OneToMany(mappedBy = "pregunta", fetch = FetchType.LAZY)
-    private Set<Respuesta> respuestas;
+    @OneToOne(mappedBy = "pregunta", fetch = FetchType.LAZY)
+    private Respuesta respuesta;
 
-
-
+//    @OneToMany(mappedBy = "pregunta", fetch = FetchType.LAZY)
+//    private Set<Respuesta> respuestas;
 
 //    @Column(name = "id_encuesta")
 //    private String idEncuesta;

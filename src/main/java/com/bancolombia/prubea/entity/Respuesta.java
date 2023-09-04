@@ -21,8 +21,12 @@ public class Respuesta {
     private String idPersona;
     private String referencia;
 
-    @Column(name = "id_pregunta")
-    private String pregunta;
+//    @Column(name = "id_pregunta")
+//    private String pregunta;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_pregunta")
+    private PreguntaE pregunta;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "id_pregunta")

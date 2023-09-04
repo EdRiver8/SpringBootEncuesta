@@ -1,17 +1,12 @@
 package com.bancolombia.prubea.service;
 
 import com.bancolombia.prubea.dto.*;
-import com.bancolombia.prubea.entity.Encuesta;
-import com.bancolombia.prubea.entity.PreguntaE;
-import com.bancolombia.prubea.entity.TipoEncuesta;
-import com.bancolombia.prubea.entity.TipoPregunta;
+import com.bancolombia.prubea.entity.*;
 import com.bancolombia.prubea.repository.EncuestaRepository;
 import com.bancolombia.prubea.repository.PreguntaERepository;
-import com.bancolombia.prubea.repository.TipoEncuestaRepository;
-import com.bancolombia.prubea.repository.TipoPreguntaRepository;
+import com.bancolombia.prubea.repository.RespuestaRepository;
 import com.bancolombia.prubea.util.Constants;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,15 +18,13 @@ public class EncuestaServiceImpl implements IEncuestaService {
 
     private final EncuestaRepository surveyRepository;
     private final PreguntaERepository questionRepository;
-    private final TipoEncuestaRepository surveyTypeRepository;
-    private final TipoPreguntaRepository questionTypeRepository;
+    private final RespuestaRepository answerRespository;
 
-    public EncuestaServiceImpl(EncuestaRepository surveyRepository, PreguntaERepository questionRepository,
-                               TipoEncuestaRepository surveyTypeRepository, TipoPreguntaRepository questionTypeRepository) {
+    public EncuestaServiceImpl(EncuestaRepository surveyRepository,
+                               PreguntaERepository questionRepository, RespuestaRepository answerRespository) {
         this.surveyRepository = surveyRepository;
         this.questionRepository = questionRepository;
-        this.surveyTypeRepository = surveyTypeRepository;
-        this.questionTypeRepository = questionTypeRepository;
+        this.answerRespository = answerRespository;
     }
 
     public ServiceResponseDto createSurvey(EncuestaDto surveyDto){
@@ -46,15 +39,23 @@ public class EncuestaServiceImpl implements IEncuestaService {
             // Se guarda entidad Encuesta que recibe fk TipoEncuesta y envia Fk a Pregunta
             surveyRepository.save(survey);
             // Se crean preguntas se envia encuesta del paso anterior y se asigna TipoPregunta
-            Set<PreguntaE> questions = surveyDto.getQuestionDto().stream().map(questionEDto -> {
+            surveyDto.getQuestionDto().stream().forEach(questionEDto -> {
                 // Validar TipoPregunta, para ser enviado a la Pregunta
                 TipoPregunta questionType = TipoPreguntaDto.convertQuestionTypeDtoToQuestionType
                         (questionEDto.getQuestionTypeDto());
+
                 // Enviar datos necesarios para crear la pregunta desde su DTO y Retornarla
-                return questionEDto.convertQuestionSDtoToQuestionS(questionEDto, survey, questionType);
-            }).collect(Collectors.toSet());
+                PreguntaE question = questionEDto.convertQuestionSDtoToQuestionS(questionEDto, survey, questionType);
+
+                questionRepository.save(question);
+
+                Respuesta answer = RespuestaDto.convertAnswerDtoToAnswer(questionEDto.getAnswerDto(), question);
+
+                answerRespository.save(answer);
+
+            });
             // se guardan las preguntas con la relacion Encuesta/Pregunta
-            questionRepository.saveAll(questions);
+//            questionRepository.saveAll(questions);
             data.put("message", "encuesta creada con exito!");
         }catch (Exception e){
             statusCode = Constants.INTERNAL_SERVER_ERROR_STATUS_CODE;

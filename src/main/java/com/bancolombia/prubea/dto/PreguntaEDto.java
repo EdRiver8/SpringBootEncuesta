@@ -27,15 +27,9 @@ public class PreguntaEDto {
     @ApiModelProperty(example = "Muchas Opciones")
     private String options;
     private TipoPreguntaDto questionTypeDto;
-    private Set<PreguntaE> answersDto;
+    private RespuestaDto answerDto;
 //    private EncuestaDto surveyDto; // permite mostrar la encuesta desde la preguntaDto
 
-    /**
-     * Method to convert PreguntaEDto to PreguntaE
-     * @param questionEDto - PreguntaEDto object
-     * @param encuesta - Encuesta object
-     * @return ControllerDto
-     */
     public PreguntaE convertQuestionSDtoToQuestionS(PreguntaEDto questionEDto, Encuesta encuesta, TipoPregunta questionType) {
         return PreguntaE.builder()
                 .idPregunta(UUID.randomUUID().toString())
@@ -47,11 +41,6 @@ public class PreguntaEDto {
                 .build();
     }
 
-    /**
-     * Method to convert PreguntaE to PreguntaEDto
-     * @param questionE - PreguntaE object
-     * @return ControllerDto
-     */
     public static PreguntaEDto convertQuestionSToQuestionSDto(PreguntaE questionE) {
         return PreguntaEDto.builder()
                 .questionTypeDto(TipoPreguntaDto.convertQuestionTypeToQuestionTypeDto(questionE.getTipoPregunta()))
@@ -59,6 +48,7 @@ public class PreguntaEDto {
                 .indexPregunta(questionE.getIndexPregunta())
                 .dsQuestion(questionE.getDsPregunta())
                 .options(questionE.getOpciones())
+                .answerDto(RespuestaDto.convertAnswerToAnswerDto(questionE.getRespuesta()))
 //                .surveyDto(EncuestaDto.convertSurveyToSurveyDto(questionE.getEncuesta())) // permite mostrar la encuesta desde la pregunta
                 .build();
     }

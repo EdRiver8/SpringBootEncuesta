@@ -15,7 +15,6 @@ import java.util.Set;
 @Getter @Setter
 @Builder
 public class Encuesta {
-
     @Id
     @Column(name = "id_encuesta", length = 36)
     private String idEncuesta;

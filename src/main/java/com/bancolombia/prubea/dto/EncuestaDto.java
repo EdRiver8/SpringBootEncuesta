@@ -56,4 +56,5 @@ public class EncuestaDto {
 //                        .collect(Collectors.toSet()))
                 .build();
     }
+
 }
