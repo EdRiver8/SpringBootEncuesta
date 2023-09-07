@@ -37,7 +37,7 @@ public class PreguntaEServiceImpl implements IPreguntaEService {
             if(preguntaERepository.count() != 0){
                 List<PreguntaE> preguntasE = preguntaERepository.findAll();
                 List<PreguntaEDto> preguntasEDto = preguntasE.stream()
-                        .map(PreguntaEDto::convertQuestionSToQuestionSDto)
+                        .map(PreguntaEDto::convertQuestionsToQuestionsDtoWithoutAnswers)
                         .collect(Collectors.toList());
                 data.put("objects", preguntasEDto);
                 data.put("total", preguntaERepository.count());

@@ -11,6 +11,7 @@ public class Constants {
 	public static final int UNAUTHORIZED_STATUS_CODE = 401;
 	public static final int FORBIDDEN_STATUS_CODE = 403;
 	public static final int NOT_FOUND_STATUS_CODE = 404;
+	public static final int CONFLICT_WITH_CURRENT_STATE = 409;
 	public static final int NO_CONTENT_STATUS_CODE = 204;
 	public static final int INTERNAL_SERVER_ERROR_STATUS_CODE = 500;
 	public static final String SISTEMA = "SISTEMA";

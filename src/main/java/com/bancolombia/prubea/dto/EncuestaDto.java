@@ -4,16 +4,13 @@ import com.bancolombia.prubea.entity.Encuesta;
 import com.bancolombia.prubea.entity.TipoEncuesta;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Data
+@Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Builder
 @ApiModel(description = "Modelado de la Encuesta")
@@ -23,7 +20,7 @@ public class EncuestaDto {
     private String surveyName;
     @ApiModelProperty(example = "Encuesta dirigida al curso de Spring")
     private String dsSurvey;
-    @ApiModelProperty(example = "Activa")
+    @ApiModelProperty(example = "Activada")
     private String state;
     @ApiModelProperty(value = "1", example = "3")
     private Integer amountQuestions;
@@ -38,7 +35,7 @@ public class EncuestaDto {
                 .nombreEncuesta(surveyDto.getSurveyName())
                 .dsEncuesta(surveyDto.getDsSurvey())
                 .cantidadPreguntas(surveyDto.getAmountQuestions())
-                .estado(surveyDto.getState())
+                .esEncuesta(surveyDto.getState())
                 .tipoEncuesta(surveyType)
                 .build();
     }
@@ -50,7 +47,7 @@ public class EncuestaDto {
                 .surveyName(survey.getNombreEncuesta())
                 .dsSurvey(survey.getDsEncuesta())
                 .amountQuestions(survey.getCantidadPreguntas())
-                .state(survey.getEstado())
+                .state(survey.getEsEncuesta())
                 .surveyTypeDto(TipoEncuestaDto.convertSurveyTypeToSurveyTypeDto(survey.getTipoEncuesta())) // permite mostrar el tipo desde encuesta
 //                .questionDto(survey.getPreguntas().stream().map(PreguntaEDto::convertQuestionSToQuestionSDto) // permite mostrar las preguntas desde encuesta
 //                        .collect(Collectors.toSet()))

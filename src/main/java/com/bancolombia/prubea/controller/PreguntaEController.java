@@ -3,10 +3,12 @@ package com.bancolombia.prubea.controller;
 import com.bancolombia.prubea.dto.ControllerDto;
 import com.bancolombia.prubea.dto.ServiceResponseDto;
 import com.bancolombia.prubea.service.IPreguntaEService;
+import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Api(tags = "Pregunta: Rutas Disponibles")
 @RestController
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT })
 @RequestMapping("/preguntas")

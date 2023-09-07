@@ -1,8 +1,5 @@
 package com.bancolombia.prubea.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
@@ -35,8 +32,8 @@ public class PreguntaE {
     @JoinColumn(name = "id_tipo_pregunta")
     private TipoPregunta tipoPregunta;
 
-    @OneToOne(mappedBy = "pregunta", fetch = FetchType.LAZY)
-    private Respuesta respuesta;
+    @OneToMany(mappedBy = "pregunta", fetch = FetchType.LAZY)
+    private Set<Respuesta> respuestas;
 
 //    @OneToMany(mappedBy = "pregunta", fetch = FetchType.LAZY)
 //    private Set<Respuesta> respuestas;

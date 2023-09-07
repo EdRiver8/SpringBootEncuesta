@@ -25,8 +25,8 @@ public class Encuesta {
     @Column(name = "ds_encuesta",length = 100)
     private String dsEncuesta;
 
-    @Column(name = "estado")
-    private String estado;
+    @Column(name = "es_encuesta")
+    private String esEncuesta;
 
     @Column(name = "cantidad_preguntas")
 //    @Min(value = 1, message = "Ingrese minimo una pregunta") // spring-boot-starter-validation
@@ -39,13 +39,7 @@ public class Encuesta {
     @JoinColumn(name = "id_tipo_encuesta")
     private TipoEncuesta tipoEncuesta;
 
-
-
-//    @Column(name = "id_tipo_encuesta")
-//    private String idTipoEncuesta;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "id_tipo_encuesta", referencedColumnName = "id_tipo_encuesta", updatable = false, insertable = false)
-//    private TipoEncuesta tipoEncuesta;
+    @OneToMany(mappedBy = "encuesta", fetch = FetchType.LAZY)
+    private Set<PersonaEncuesta> personaEncuestas;
 
 }

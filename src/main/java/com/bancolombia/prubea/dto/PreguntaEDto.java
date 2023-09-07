@@ -4,18 +4,16 @@ import com.bancolombia.prubea.entity.Encuesta;
 import com.bancolombia.prubea.entity.PreguntaE;
 import com.bancolombia.prubea.entity.TipoPregunta;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter @Setter
 @Builder
 public class PreguntaEDto {
     @ApiModelProperty(value = "", example = "hahahahaha")
@@ -27,10 +25,11 @@ public class PreguntaEDto {
     @ApiModelProperty(example = "Muchas Opciones")
     private String options;
     private TipoPreguntaDto questionTypeDto;
-    private RespuestaDto answerDto;
+//    @ApiModelProperty(hidden = true) // Ocultar el parametros Answer para el crear que es el que lo usa
+    private Set<RespuestaDto> answerDto;
 //    private EncuestaDto surveyDto; // permite mostrar la encuesta desde la preguntaDto
 
-    public PreguntaE convertQuestionSDtoToQuestionS(PreguntaEDto questionEDto, Encuesta encuesta, TipoPregunta questionType) {
+    public PreguntaE convertQuestionsDtoToQuestions(PreguntaEDto questionEDto, Encuesta encuesta, TipoPregunta questionType) {
         return PreguntaE.builder()
                 .idPregunta(UUID.randomUUID().toString())
                 .tipoPregunta(questionType)
@@ -41,15 +40,25 @@ public class PreguntaEDto {
                 .build();
     }
 
-    public static PreguntaEDto convertQuestionSToQuestionSDto(PreguntaE questionE) {
+    public static PreguntaEDto convertQuestionsToQuestionsDtoWithoutAnswers(PreguntaE questionE) {
         return PreguntaEDto.builder()
                 .questionTypeDto(TipoPreguntaDto.convertQuestionTypeToQuestionTypeDto(questionE.getTipoPregunta()))
                 .idQuestion(questionE.getIdPregunta())
                 .indexPregunta(questionE.getIndexPregunta())
                 .dsQuestion(questionE.getDsPregunta())
                 .options(questionE.getOpciones())
-                .answerDto(RespuestaDto.convertAnswerToAnswerDto(questionE.getRespuesta()))
-//                .surveyDto(EncuestaDto.convertSurveyToSurveyDto(questionE.getEncuesta())) // permite mostrar la encuesta desde la pregunta
+                .build();
+    }
+
+    public static PreguntaEDto convertQuestionsToQuestionsDtoWithAnswers(PreguntaE questionE) {
+        return PreguntaEDto.builder()
+                .questionTypeDto(TipoPreguntaDto.convertQuestionTypeToQuestionTypeDto(questionE.getTipoPregunta()))
+                .idQuestion(questionE.getIdPregunta())
+                .indexPregunta(questionE.getIndexPregunta())
+                .dsQuestion(questionE.getDsPregunta())
+                .options(questionE.getOpciones())
+                .answerDto(questionE.getRespuestas().stream().map(RespuestaDto::convertAnswerToAnswerDto).collect(Collectors.toSet()))
+//                .surveyDto(EncuestaDto.convertSurveyToSurveyDto(questionE.getEncuesta())) // mostrar encuesta desde pregunta
                 .build();
     }
 }
