@@ -69,7 +69,7 @@ public class EncuestaController {
 
     @ApiOperation(value = "Lista todas las encuestas sin preguntas, Param Optional: Page, Size, Sort")
     @GetMapping("/list-all-survey")
-    public ResponseEntity<ControllerDto> listSurvey(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<ControllerDto> listSurvey(@RequestParam(defaultValue = "1") int page,
                                                     @RequestParam(defaultValue = "5") int size,
                                                     @RequestParam(defaultValue = "esEncuesta") String sort){
         ServiceResponseDto serviceResponseDto = encuestaService.listSurveyWithoutQuestions(page, size, sort);

@@ -147,7 +147,6 @@ public class EncuestaServiceImpl implements IEncuestaService {
         int statusCode = Constants.SUCCESS_STATUS_CODE;
         Map<String, Object> data = new LinkedHashMap<String, Object>();
         ServiceResponseDto serviceResponseDto = new ServiceResponseDto();
-//        Pageable pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
         try {
             if(surveyRepository.count() != 0){
                 List<Encuesta> surveys = surveyRepository.findAll();
@@ -155,8 +154,10 @@ public class EncuestaServiceImpl implements IEncuestaService {
                         .collect(Collectors.toList());
                 Page<EncuestaDto> result = convertirListaAConsultaPaginada(surveysDto, page, size);
 
-                data.put("objects", result);
-                data.put("total", surveyRepository.count());
+                data.put("objects", result.getContent());
+                data.put("Size", result.getSize());
+                data.put("Pages", result.getTotalPages());
+                data.put("total", result.getTotalElements());
             }else{
                 statusCode = Constants.NOT_FOUND_STATUS_CODE;
                 data.put("message","No se encuentran encuestas para listar!");
@@ -202,6 +203,17 @@ public class EncuestaServiceImpl implements IEncuestaService {
         return serviceResponseDto;
     }
 
+    public void responderEncuesta(){
+        // Consultar usuario en PersonaEncuesta por id persona, id oferta e id encuesta
+        // Se deber retornar el persona encuesta hallado
+        // se debolveria la encuesta las preguntas para que el usuario puede responder
+        //
+
+
+
+
+    }
+
     @Override
     public ServiceResponseDto getSurveyWithQuestionsAndAnswers(String idSurvey) {
         int statusCode = Constants.SUCCESS_STATUS_CODE;
@@ -214,9 +226,9 @@ public class EncuestaServiceImpl implements IEncuestaService {
                 EncuestaDto surveyDto = EncuestaDto.convertSurveyToSurveyDto(survey);
 
                 // verificar si al menos una pregunta tiene al menos una respuesta
-                boolean surveyWithAnswers = survey.getPreguntas().stream()
+                boolean isSurveyWithAnswers = survey.getPreguntas().stream()
                         .anyMatch(preguntaE -> !preguntaE.getRespuestas().isEmpty());
-                if (surveyWithAnswers) {
+                if (isSurveyWithAnswers) {
                     // Por lo menos una pregunta con respuesta (no deberia suceder, o todas tienen o ninguna tiene)
                     surveyDto.setQuestionDto(survey.getPreguntas().stream()
                             .map(PreguntaEDto::convertQuestionsToQuestionsDtoWithAnswers)
@@ -254,11 +266,10 @@ public class EncuestaServiceImpl implements IEncuestaService {
                 Encuesta survey = surveyRepository.getEncuestaForId(idEncuesta);
                 Set<PreguntaE> preguntas = survey.getPreguntas();
                 // verificar si al menos una pregunta tiene al menos una respuesta
-                boolean surveyWithAnswers = survey.getPreguntas().stream().anyMatch(preguntaE -> !preguntaE.getRespuestas().isEmpty());
+                boolean isSurveyWithAnswers = survey.getPreguntas().stream().anyMatch(preguntaE -> !preguntaE.getRespuestas().isEmpty());
                 //Verifica si la encuesta ya esta asignada a alguien dentro de la tabla PersonaEncuesta
                 List<PersonaEncuesta> personAssign = personaEncuestaRespository.findSurveyPersonByIdSurvey(idEncuesta);
-                if (!surveyWithAnswers && personAssign.isEmpty()) {
-                    // Por lo menos una pregunta sin respuesta (no deberia suceder, o todas tienen o ninguna tiene)
+                if (!isSurveyWithAnswers && personAssign.isEmpty()) {
                     questionRepository.deleteAll(preguntas);
                     surveyRepository.deleteById(idEncuesta);
                     data.put("message", "La encuesta se ha borrado");
@@ -306,12 +317,12 @@ public class EncuestaServiceImpl implements IEncuestaService {
 
 
     public Page<EncuestaDto> convertirListaAConsultaPaginada(List<EncuestaDto> listaDto, int pageNumber, int pageSize) {
-        int inicio = pageNumber * pageSize;
-        int fin = Math.min(inicio + pageSize, listaDto.size());
+        int elementoInicio = (pageNumber == 1) ? 0 : pageNumber * pageSize;
+        int elementoFin = Math.min(elementoInicio + pageSize, listaDto.size());
 
-//        List<EncuestaDto> subListaDto = listaDto.subList(inicio, fin);
+        List<EncuestaDto> subListaDto = listaDto.subList(elementoInicio, elementoFin);
 
-        return new PageImpl<>(listaDto, PageRequest.of(pageNumber, pageSize), listaDto.size());
+        return new PageImpl<>(subListaDto, PageRequest.of(pageNumber-1, pageSize), listaDto.size());
     }
 
 
