@@ -32,6 +32,9 @@ public class Encuesta {
 //    @Min(value = 1, message = "Ingrese minimo una pregunta") // spring-boot-starter-validation
     private Integer cantidadPreguntas;
 
+    @Column(name = "recurso")
+    private String recurso;
+
     @OneToMany(mappedBy = "encuesta", fetch = FetchType.LAZY)
     private Set<PreguntaE> preguntas;
 

@@ -1,8 +1,10 @@
 package com.bancolombia.prubea.service;
 
+import com.bancolombia.prubea.dto.EncuestaDto;
 import com.bancolombia.prubea.dto.RespuestaDto;
 import com.bancolombia.prubea.dto.ServiceResponseDto;
 import com.bancolombia.prubea.dto.TipoEncuestaDto;
+import com.bancolombia.prubea.entity.PreguntaE;
 import com.bancolombia.prubea.entity.Respuesta;
 import com.bancolombia.prubea.entity.TipoEncuesta;
 import com.bancolombia.prubea.repository.RespuestaRepository;
@@ -55,6 +57,38 @@ public class RespuestaServiceImpl implements IRespuestaService{
     public ServiceResponseDto getAllAnswers() {
         return null;
     }
+
+    @Override
+    public ServiceResponseDto replySurvey(EncuestaDto surveyDto) {
+        return null;
+    }
+
+//    @Override
+//    public ServiceResponseDto replySurvey(EncuestaDto surveyDto) {
+//        int statusCode = Constants.SUCCESS_STATUS_CODE;
+//        Map<String, Object> data = new LinkedHashMap<String, Object>();
+//        try{
+//            RespuestaDto respuestaDto = new RespuestaDto();
+//            //Recibe el idPersonaEncuesta
+//            String idSurveyPerson = surveyDto.getIdSurveyPerson();
+//            surveyDto.getQuestionDto().stream().forEach(questionEDto -> {
+//                // Se obtiene cada pregunta
+//                PreguntaE question = questionEDto.convertQuestionDtoToQuestionForReply(questionEDto);
+//                // Se crea una respuesta
+//                Respuesta answers = respuestaDto.convertAnswerDtoToAnswer(respuestaDto, question, idSurveyPerson);
+//                answerRepository.save(answers);
+//            });
+//        }
+//        catch(Exception e) {
+//            statusCode = Constants.INTERNAL_SERVER_ERROR_STATUS_CODE;
+//            data.put("message", "Error al guardar las respuestas");
+//            log.error("replySurvey", e);
+//        }
+//        ServiceResponseDto serviceResponseDto = new ServiceResponseDto();
+//        serviceResponseDto.setStatusCode(statusCode);
+//        serviceResponseDto.setData(data);
+//        return serviceResponseDto;
+//    }
 
 //    @Override
 //    public ServiceResponseDto getAllAnswers() {

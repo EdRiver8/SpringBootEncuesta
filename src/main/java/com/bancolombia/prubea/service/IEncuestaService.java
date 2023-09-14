@@ -14,5 +14,5 @@ public interface IEncuestaService {
     ServiceResponseDto deleteSurvey(String idEncuesta);
     ServiceResponseDto activateSurvey(String idEncuesta);
     ServiceResponseDto deactivateSurvey(String idEncuesta);
-    ServiceResponseDto validateActiveSatisfactionSurvey();
+    ServiceResponseDto validateActiveSatisfactionSurvey(String idSurveyType);
 }

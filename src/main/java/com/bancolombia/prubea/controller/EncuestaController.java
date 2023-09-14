@@ -40,8 +40,8 @@ public class EncuestaController {
 
     @ApiOperation(value = "Al intentar crear una encuesta de satisfaccion, valida que no haya una de este tipo activa")
     @GetMapping("/validate-active-survey")
-    public ResponseEntity<ControllerDto> getValidateActiveSurvey(){
-        ServiceResponseDto serviceResponseDto = encuestaService.validateActiveSatisfactionSurvey();
+    public ResponseEntity<ControllerDto> getValidateActiveSurvey(@RequestParam(required = true) String idSurveyType){
+        ServiceResponseDto serviceResponseDto = encuestaService.validateActiveSatisfactionSurvey(idSurveyType);
         ControllerDto controllerDto = new ControllerDto();
         controllerDto.setStatusCode(serviceResponseDto.getStatusCode());
         controllerDto.setBody(serviceResponseDto.getStatusCode(), serviceResponseDto.getData(), true);

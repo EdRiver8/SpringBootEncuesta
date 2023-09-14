@@ -1,6 +1,7 @@
 package com.bancolombia.prubea.controller;
 
 import com.bancolombia.prubea.dto.ControllerDto;
+import com.bancolombia.prubea.dto.EncuestaDto;
 import com.bancolombia.prubea.dto.ServiceResponseDto;
 import com.bancolombia.prubea.service.IRespuestaService;
 import io.swagger.annotations.Api;
@@ -36,6 +37,18 @@ public class RespuestaController {
     @GetMapping("/get-all-answers")
     public ResponseEntity<ControllerDto> listAnswers(){
         ServiceResponseDto serviceResponseDto = answerService.getAllAnswers();
+        ControllerDto controllerDto = new ControllerDto();
+        controllerDto.setStatusCode(serviceResponseDto.getStatusCode());
+        controllerDto.setBody(serviceResponseDto.getStatusCode(), serviceResponseDto.getData(), true);
+        ResponseEntity<ControllerDto> response = ResponseEntity.status(HttpStatus.OK).body(controllerDto);
+        return response;
+    }
+
+    @ApiOperation(value = "Responder la encuesta")
+    @PostMapping("/reply")
+    public ResponseEntity<ControllerDto> create(@RequestBody EncuestaDto surveyDto)
+    {
+        ServiceResponseDto serviceResponseDto = answerService.replySurvey(surveyDto);
         ControllerDto controllerDto = new ControllerDto();
         controllerDto.setStatusCode(serviceResponseDto.getStatusCode());
         controllerDto.setBody(serviceResponseDto.getStatusCode(), serviceResponseDto.getData(), true);

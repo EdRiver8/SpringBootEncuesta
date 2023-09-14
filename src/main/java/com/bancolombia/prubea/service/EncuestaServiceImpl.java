@@ -32,25 +32,35 @@ public class EncuestaServiceImpl implements IEncuestaService {
     }
 
     @Override
-    public ServiceResponseDto validateActiveSatisfactionSurvey(){
+    public ServiceResponseDto validateActiveSatisfactionSurvey(String idSurveyType){
         int statusCode = Constants.SUCCESS_STATUS_CODE;
         Map<String, Object> data = new LinkedHashMap<String, Object>();
         try{
-            if(surveyRepository.count() > 0 &&
-                    !surveyRepository.findByTipoEncuestaEsEncuesta("2", "Activada").isPresent()){
-                Encuesta survey = surveyRepository
-                        .findByTipoEncuestaEsEncuesta("2", "Activada").orElse(null);
-
-                EncuestaDto surveyDto = EncuestaDto.convertSurveyToSurveyDto(survey);
-                surveyDto.setQuestionDto(survey.getPreguntas().stream()
-                        .map(PreguntaEDto::convertQuestionsToQuestionsDtoWithoutAnswers).collect(Collectors.toSet()));
-
-                statusCode = Constants.CONFLICT_WITH_CURRENT_STATE;
-                data.put("objects", surveyDto);
-                data.put("total", 1);
-                data.put("message", "Ya hay una encuesta Activa de satisfaccion");
+            if(idSurveyType.equals("1")){
+                data.put("message", "Puedes crear la encuesta personalizada!");
             }else{
-                data.put("message", "No existe encuesta de satisfaccion activa, puedes crear la encuesta!");
+                if(surveyRepository.count() == 0){
+                    data.put("message", "No existen encuestas aun!, puedes crear la 1ra.");
+                }else{
+                    if(surveyRepository.findByTipoEncuestaEsEncuesta("2", "Activada").isPresent()){
+                        Encuesta survey = surveyRepository
+                                .findByTipoEncuestaEsEncuesta("2", "Activada").orElse(null);
+
+                        EncuestaDto surveyDto = EncuestaDto.convertSurveyToSurveyDto(survey);
+                        surveyDto.setQuestionDto(survey.getPreguntas().stream()
+                                .map(PreguntaEDto::convertQuestionsToQuestionsDtoWithoutAnswers).collect(Collectors.toSet()));
+
+                        statusCode = Constants.CONFLICT_WITH_CURRENT_STATE;
+                        data.put("objects", surveyDto);
+                        data.put("total", 1);
+                        data.put("message", "Ya hay una encuesta Activa de satisfaccion");
+                        data.put("Active", true);
+                    }
+                    else{
+                        data.put("message", "No existe encuesta de satisfaccion activa, puedes crear la encuesta!");
+                        data.put("Active", false);
+                    }
+                }
             }
         }catch (Exception e){
             statusCode = Constants.INTERNAL_SERVER_ERROR_STATUS_CODE;
@@ -63,30 +73,47 @@ public class EncuestaServiceImpl implements IEncuestaService {
         return serviceResponseDto;
     }
 
+    public String validateConditionsToCreateSurvey(EncuestaDto surveyDto){
+        String validate = "";
+        if(surveyDto.getQuestionDto().isEmpty()){
+            validate = "La encuesta no se puede guardar, ya que no tiene preguntas asociadas";
+        }else if(surveyDto.getSurveyTypeDto().getIdSurveyType().equals("1")){
+            validate = "Puedes crear la encuesta";
+        }else if(surveyRepository.findByTipoEncuestaEsEncuesta("2", "Activada").isPresent()){
+            validate = "Ya hay una encuesta de satisfaccion activada!";
+        }
+        return validate;
+    }
+
     @Override
     public ServiceResponseDto createSurvey(EncuestaDto surveyDto){
         int statusCode = Constants.SUCCESS_STATUS_CODE;
         Map<String, Object> data = new LinkedHashMap<String, Object>();
         try{
-            if(surveyRepository.count() > 0){
-                if(!surveyRepository.findByTipoEncuestaEsEncuesta("2", "Activada").isPresent()
-                        && !surveyDto.getQuestionDto().isEmpty()){
-                    create(surveyDto);
-                    data.put("message", "encuesta creada con exito!");
-                }else{
-                    Encuesta survey = surveyRepository
-                            .findByTipoEncuestaEsEncuesta("2", "Activada").orElse(null);
-                    EncuestaDto surveyDtoFind = EncuestaDto.convertSurveyToSurveyDto(survey);
-                    surveyDto.setQuestionDto(survey.getPreguntas().stream()
-                            .map(PreguntaEDto::convertQuestionsToQuestionsDtoWithoutAnswers).collect(Collectors.toSet()));
-                    statusCode = Constants.CONFLICT_WITH_CURRENT_STATE;
-                    data.put("objects", surveyDtoFind);
-                    data.put("total", 1);
-                    data.put("message", "Ya hay una encuesta activa!");
-                }
-            }else{
+            if(surveyDto.getSurveyTypeDto().getIdSurveyType().equals("1")){
                 create(surveyDto);
-                data.put("message", "1ra encuesta de la DB creada con exito!");
+                data.put("message", "encuesta creada con exito!");
+            }else{
+                if(surveyRepository.count() > 0){
+                    if(!surveyRepository.findByTipoEncuestaEsEncuesta("2", "Activada").isPresent()
+                            && !surveyDto.getQuestionDto().isEmpty()){
+                        create(surveyDto);
+                        data.put("message", "encuesta creada con exito!");
+                    }else{
+                        Encuesta survey = surveyRepository
+                                .findByTipoEncuestaEsEncuesta("2", "Activada").orElse(null);
+                        EncuestaDto surveyDtoFind = EncuestaDto.convertSurveyToSurveyDto(survey);
+                        surveyDto.setQuestionDto(survey.getPreguntas().stream()
+                                .map(PreguntaEDto::convertQuestionsToQuestionsDtoWithoutAnswers).collect(Collectors.toSet()));
+                        statusCode = Constants.CONFLICT_WITH_CURRENT_STATE;
+                        data.put("objects", surveyDtoFind);
+                        data.put("total", 1);
+                        data.put("message", "Ya hay una encuesta activa!");
+                    }
+                }else{
+                    create(surveyDto);
+                    data.put("message", "1ra encuesta de la DB creada con exito!");
+                }
             }
         }catch (Exception e){
             statusCode = Constants.INTERNAL_SERVER_ERROR_STATUS_CODE;
@@ -317,7 +344,7 @@ public class EncuestaServiceImpl implements IEncuestaService {
 
 
     public Page<EncuestaDto> convertirListaAConsultaPaginada(List<EncuestaDto> listaDto, int pageNumber, int pageSize) {
-        int elementoInicio = (pageNumber == 1) ? 0 : pageNumber * pageSize;
+        int elementoInicio = (pageNumber == 1) ? 0 : (pageNumber - 1) * pageSize;
         int elementoFin = Math.min(elementoInicio + pageSize, listaDto.size());
 
         List<EncuestaDto> subListaDto = listaDto.subList(elementoInicio, elementoFin);

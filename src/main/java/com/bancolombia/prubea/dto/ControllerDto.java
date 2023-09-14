@@ -76,6 +76,11 @@ public class ControllerDto {
 				message = "INTERNAL_SERVER_ERROR";
 				description = "Internal server error";
 			break;
+			case Constants.CONFLICT_WITH_CURRENT_STATE:
+				status = "error";
+				message = "CONFLICT";
+				description = "Resource already exists";
+			break;
 			default:
 				status = "undefined";
 				message = "undefined";

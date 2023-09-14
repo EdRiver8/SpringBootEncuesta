@@ -37,7 +37,7 @@ class EncuestaRepositoryTest2 {
                 .nombreEncuesta("Encuesta 1")
                 .dsEncuesta("Encuesta del curso...")
                 .cantidadPreguntas(3)
-                .estado("Activa")
+                .esEncuesta("Activada")
                 .tipoEncuesta(tipoEncuesta)
                 .build();
 
