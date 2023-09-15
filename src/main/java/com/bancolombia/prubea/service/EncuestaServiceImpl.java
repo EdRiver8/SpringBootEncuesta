@@ -7,10 +7,14 @@ import com.bancolombia.prubea.repository.PersonaEncuestaRespository;
 import com.bancolombia.prubea.repository.PreguntaERepository;
 import com.bancolombia.prubea.repository.RespuestaRepository;
 import com.bancolombia.prubea.util.Constants;
+import com.opencsv.CSVWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -230,17 +234,6 @@ public class EncuestaServiceImpl implements IEncuestaService {
         return serviceResponseDto;
     }
 
-    public void responderEncuesta(){
-        // Consultar usuario en PersonaEncuesta por id persona, id oferta e id encuesta
-        // Se deber retornar el persona encuesta hallado
-        // se debolveria la encuesta las preguntas para que el usuario puede responder
-        //
-
-
-
-
-    }
-
     @Override
     public ServiceResponseDto getSurveyWithQuestionsAndAnswers(String idSurvey) {
         int statusCode = Constants.SUCCESS_STATUS_CODE;
@@ -352,32 +345,31 @@ public class EncuestaServiceImpl implements IEncuestaService {
         return new PageImpl<>(subListaDto, PageRequest.of(pageNumber-1, pageSize), listaDto.size());
     }
 
-
-
-
     @Override
-    public ServiceResponseDto findSurveyById(String idEncuesta) {
-        int statusCode = Constants.SUCCESS_STATUS_CODE;
-        Map<String, Object> data = new LinkedHashMap<String, Object>();
-        ServiceResponseDto serviceResponseDto = new ServiceResponseDto();
-        try {
-            if(surveyRepository.existsById(idEncuesta)){
-                data.put("EncuestaDto", EncuestaDto
-                        .convertSurveyToSurveyDto(surveyRepository.getEncuestaForId(idEncuesta)));
-            }else{
-                statusCode = Constants.NOT_FOUND_STATUS_CODE;
-                data.put("message", "La encuesta buscada no se encontro");
+    public byte[] generarReporteCsvEncuesta(String surveyId) throws IOException {
+        Encuesta encuesta = surveyRepository.getEncuestaForId(surveyId);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try (CSVWriter csvWriter = new CSVWriter(new OutputStreamWriter(outputStream))) {
+            // Escribir encabezados del CSV
+            String[] encabezados = {"ID de Pregunta", "Pregunta", "ID de Respuesta", "Respuesta", "ID de Persona"};
+            csvWriter.writeNext(encabezados);
+            // Iterar a través de las preguntas y respuestas de la encuesta
+            for (PreguntaE pregunta : encuesta.getPreguntas()) {
+                for (Respuesta respuesta : pregunta.getRespuestas()) {
+                    String[] fila = {
+                            String.valueOf(pregunta.getIdPregunta()),
+                            pregunta.getDsPregunta(),
+                            String.valueOf(respuesta.getIdRespuesta()),
+                            respuesta.getRespuesta(),
+                            String.valueOf(respuesta.getPersonaEncuesta().getIdPersonaEncuesta())
+                    };
+                    csvWriter.writeNext(fila);
+                }
             }
-        }catch (Exception e){
-            statusCode = Constants.INTERNAL_SERVER_ERROR_STATUS_CODE;
-            log.error("findSurveyById failed", e);
         }
-        serviceResponseDto.setStatusCode(statusCode);
-        serviceResponseDto.setData(data);
-        return serviceResponseDto;
+        return outputStream.toByteArray();
     }
-
-
 
 
     @Override
@@ -385,7 +377,10 @@ public class EncuestaServiceImpl implements IEncuestaService {
         return null;
     }
 
-
+    @Override
+    public ServiceResponseDto findSurveyById(String idEncuesta) {
+        return null;
+    }
 
     @Override
     public ServiceResponseDto activateSurvey(String idEncuesta) {

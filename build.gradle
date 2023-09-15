@@ -49,6 +49,11 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter
 	implementation("io.springfox:springfox-boot-starter:3.0.0")
+
+// https://mvnrepository.com/artifact/com.opencsv/opencsv
+	implementation 'com.opencsv:opencsv:5.8'
+
+
 }
 
 tasks.named('test') {

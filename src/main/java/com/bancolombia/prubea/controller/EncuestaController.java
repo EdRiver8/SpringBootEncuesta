@@ -6,9 +6,14 @@ import com.bancolombia.prubea.dto.ServiceResponseDto;
 import com.bancolombia.prubea.service.IEncuestaService;
 import io.swagger.annotations.*;
 import io.swagger.v3.oas.annotations.Hidden;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @Api(tags = "Encuestas: Rutas Disponibles")
 @RestController
@@ -118,5 +123,20 @@ public class EncuestaController {
         ResponseEntity<ControllerDto> response = ResponseEntity.status(HttpStatus.OK).body(controllerDto);
         return response;
     }
+
+
+
+    @GetMapping("/{encuestaId}/reporte-csv")
+    public ResponseEntity<byte[]> generarInformeCsv(@PathVariable String encuestaId) throws IOException {
+        byte[] informeCsv = encuestaService.generarReporteCsvEncuesta(encuestaId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("text/csv"));
+        headers.setContentDispositionFormData("attachment", "informe.csv");
+
+        return new ResponseEntity<>(informeCsv, headers, HttpStatus.OK);
+    }
+
+
 
 }
