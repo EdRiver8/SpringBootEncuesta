@@ -1,0 +1,57 @@
+{
+	"amountQuestions": 2,
+	"dsSurvey": "Encuesta dirigida al curso de Spring",
+	"idSurvey": "string",
+	"questionDto": [{
+		"answerDto": [{
+			"answer": "Esta es una respuesta",
+			"idAnswer": "123",
+			"idPerson": "string",
+			"idPersonSurvey": "Natalia6675677678"
+		}, {
+			"answer": "Esta es otra respuesta",
+			"idAnswer": "456",
+			"idPerson": "string",
+			"idPersonSurvey": "Edw"
+		}, {
+			"answer": "La 3ra respuesta",
+			"idAnswer": "789",
+			"idPerson": "string",
+			"idPersonSurvey": "Dani"
+		}],
+		"dsQuestion": "Cual es el apellido de Goku?",
+		"idQuestion": "1ra pre",
+		"indexPregunta": 1,
+		"options": "Muchas Opciones",
+		"questionTypeDto": {
+			"dsQuestionType": "Opcion multiple, unica respuesta",
+			"idQuestionType": 1
+		}
+	}, {
+		"answerDto": [{
+			"answer": "Respuesta 2da pre",
+			"idAnswer": "123",
+			"idPerson": "string",
+			"idPersonSurvey": "Natalia6675677678"
+		}, {
+			"answer": "2da respuesta, 2da pre",
+			"idAnswer": "456",
+			"idPerson": "string",
+			"idPersonSurvey": "Edw"
+		}],
+		"dsQuestion": "Cual es el apellido de Vegeta?",
+		"idQuestion": "2da Preg",
+		"indexPregunta": 2,
+		"options": "Muchas Opciones",
+		"questionTypeDto": {
+			"dsQuestionType": "Opcion multiple, unica respuesta",
+			"idQuestionType": 1
+		}
+	}],
+	"state": "Activada",
+	"surveyName": "Encuesta Curso...",
+	"surveyTypeDto": {
+		"dsSurveyType": "Personalizada",
+		"idSurveyType": 1
+	}
+}

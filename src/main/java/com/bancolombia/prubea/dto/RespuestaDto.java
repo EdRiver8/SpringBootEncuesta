@@ -15,11 +15,11 @@ import java.util.UUID;
 @Getter @Setter
 @Builder
 public class RespuestaDto {
-    @ApiModelProperty(example = "hahahahaha")
+    @ApiModelProperty(example = "1")
     private String idAnswer;
     @ApiModelProperty(example = "Esta es una respuesta")
     private String answer;
-    @ApiModelProperty(example = "Natalia6675677678")
+    @ApiModelProperty(example = "4")
     private String idPersonSurvey;
     private String idPerson;
 

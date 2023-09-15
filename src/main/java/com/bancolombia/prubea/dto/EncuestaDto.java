@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Builder
 @ApiModel(description = "Modelado de la Encuesta")
 public class EncuestaDto {
+    @ApiModelProperty(example = "1")
     private String idSurvey;
     @ApiModelProperty(example = "Encuesta Curso...")
     private String surveyName;

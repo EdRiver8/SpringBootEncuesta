@@ -88,7 +88,7 @@ public class EncuestaController {
     @ApiOperation(value = "Busca una encuesta por su id y la trae con sus preguntas")
     @GetMapping("/get-questions/{idSurvey}")
     public ResponseEntity<ControllerDto> listSurveyWithQuestions(
-            @ApiParam(example = "11bb12af-b8b4-4b2f-893e-3e41921c0d8e",
+            @ApiParam(example = "1",
                     required = true)@PathVariable(name = "idSurvey") String idSurvey){
         ServiceResponseDto serviceResponseDto = encuestaService.getSurveyWithQuestions(idSurvey);
         ControllerDto controllerDto = new ControllerDto();
@@ -101,7 +101,7 @@ public class EncuestaController {
     @ApiOperation(value = "Busca una encuesta por su id y la trae con preguntas y respectivas respuestas")
     @GetMapping("/get-questions-answers/{idSurvey}")
     public ResponseEntity<ControllerDto> listSurveyWithQuestionsAndAnswers(
-            @ApiParam(example = "11bb12af-b8b4-4b2f-893e-3e41921c0d8e",
+            @ApiParam(example = "1",
                     required = true)@PathVariable(name = "idSurvey") String idSurvey){
         ServiceResponseDto serviceResponseDto = encuestaService.getSurveyWithQuestionsAndAnswers(idSurvey);
         ControllerDto controllerDto = new ControllerDto();
@@ -114,7 +114,7 @@ public class EncuestaController {
     @ApiOperation(value = "Eliminar una encuesta por el id sino cuenta ya con respuestas")
     @DeleteMapping("/delete/{idSurvey}")
     public ResponseEntity<ControllerDto> deleteSurvey(
-            @ApiParam(example = "11bb12af-b8b4-4b2f-893e-3e41921c0d8e",
+            @ApiParam(example = "1",
                     required = true)@PathVariable(name = "idSurvey") String idSurvey){
         ServiceResponseDto serviceResponseDto = encuestaService.deleteSurvey(idSurvey);
         ControllerDto controllerDto = new ControllerDto();
@@ -125,14 +125,13 @@ public class EncuestaController {
     }
 
 
-
     @GetMapping("/{encuestaId}/reporte-csv")
     public ResponseEntity<byte[]> generarInformeCsv(@PathVariable String encuestaId) throws IOException {
         byte[] informeCsv = encuestaService.generarReporteCsvEncuesta(encuestaId);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType("text/csv"));
-        headers.setContentDispositionFormData("attachment", "informe.csv");
+        headers.setContentDispositionFormData("attachment", "reporte_encuesta.csv");
 
         return new ResponseEntity<>(informeCsv, headers, HttpStatus.OK);
     }

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Getter @Setter
 @Builder
 public class PreguntaEDto {
-    @ApiModelProperty(value = "", example = "hahahahaha")
+    @ApiModelProperty(value = "", example = "1")
     private String idQuestion;
     @ApiModelProperty(value = "Posicion de la pregunta en la encuesta?", example = "1")
     private Integer indexPregunta;
