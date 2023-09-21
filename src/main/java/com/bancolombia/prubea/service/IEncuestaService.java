@@ -14,8 +14,10 @@ public interface IEncuestaService {
     ServiceResponseDto getSurveyWithQuestionsAndAnswers(String idSurvey);
     ServiceResponseDto updateSurvey(EncuestaDto encuestaDto);
     ServiceResponseDto deleteSurvey(String idEncuesta);
-    ServiceResponseDto activateSurvey(String idEncuesta);
+    ServiceResponseDto activateSurvey(String idSurvey);
     ServiceResponseDto deactivateSurvey(String idEncuesta);
     ServiceResponseDto validateActiveSatisfactionSurvey(String idSurveyType);
+    public ServiceResponseDto validateAssignSurveyToPerson(String idSurvey);
     byte[] generarReporteCsvEncuesta(String surveyId) throws IOException;
+    ServiceResponseDto generarReporteCsvEncuesta2(String surveyId) throws IOException;
 }

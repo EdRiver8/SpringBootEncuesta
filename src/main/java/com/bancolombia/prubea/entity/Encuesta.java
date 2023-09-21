@@ -33,7 +33,7 @@ public class Encuesta {
     private Integer cantidadPreguntas;
 
     @Column(name = "recurso")
-    private String recurso;
+    private String recurso; // Codigo del area al que pertener una persona, para que solo deje crear encuestas en estas areas
 
     @OneToMany(mappedBy = "encuesta", fetch = FetchType.LAZY)
     private Set<PreguntaE> preguntas;

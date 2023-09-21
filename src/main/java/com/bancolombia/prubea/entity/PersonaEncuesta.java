@@ -20,7 +20,7 @@ public class PersonaEncuesta {
     private Boolean esRespuesta;
 
     @Column (name = "referencia", length = 36)
-    private String referencia;
+    private String referencia; // codigo que relaciona la oferta con la PersonaEncuesta, la oferta se relaciona a la vez a Curso
 
     @Column(name = "tipo_referencia")
     private String tipoReferencia;

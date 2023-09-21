@@ -281,39 +281,42 @@ public class EncuestaServiceImpl implements IEncuestaService {
         int statusCode = Constants.SUCCESS_STATUS_CODE;
         Map<String, Object> data = new LinkedHashMap<String, Object>();
         ServiceResponseDto serviceResponseDto = new ServiceResponseDto();
-        try{
-            if(surveyRepository.existsById(idEncuesta)){
-                Encuesta survey = surveyRepository.getEncuestaForId(idEncuesta);
-                Set<PreguntaE> preguntas = survey.getPreguntas();
-                // verificar si al menos una pregunta tiene al menos una respuesta
-                boolean isSurveyWithAnswers = survey.getPreguntas().stream().anyMatch(preguntaE -> !preguntaE.getRespuestas().isEmpty());
-                //Verifica si la encuesta ya esta asignada a alguien dentro de la tabla PersonaEncuesta
-                List<PersonaEncuesta> personAssign = personaEncuestaRespository.findSurveyPersonByIdSurvey(idEncuesta);
-                if (!isSurveyWithAnswers && personAssign.isEmpty()) {
-                    questionRepository.deleteAll(preguntas);
-                    surveyRepository.deleteById(idEncuesta);
-                    data.put("message", "La encuesta se ha borrado");
+        try {
+            if (surveyRepository.count() != 0) {
+                if (surveyRepository.existsById(idEncuesta)) {
+                    Encuesta survey = surveyRepository.getEncuestaForId(idEncuesta);
+                    Set<PreguntaE> preguntas = survey.getPreguntas();
+                    boolean isSurveyWithAnswers = survey.getPreguntas()
+                            .stream().anyMatch(preguntaE -> Objects.nonNull(preguntaE.getRespuestas()));
+                    List<PersonaEncuesta> personAssign = personaEncuestaRespository
+                            .findSurveyPersonByIdSurvey(idEncuesta);
+                    if (isSurveyWithAnswers && personAssign.isEmpty()) {
+                        questionRepository.deleteAll(preguntas);
+                        surveyRepository.deleteById(idEncuesta);
+                        data.put("message", "La encuesta se ha borrado");
+                    } else {
+                        survey.setEsEncuesta("Desactivada");
+                        surveyRepository.save(survey);
+                        data.put("message", "La encuesta se ha desactivado");
+                    }
                 } else {
-                    //Se encuentran respuestas o ya hay alguna asignacion en PersonaEncuesta
-                    survey.setEsEncuesta("Desactivada");
-                    surveyRepository.save(survey);
-                    data.put("message", "La encuesta se ha desactivado");
+                    statusCode = Constants.NOT_FOUND_STATUS_CODE;
+                    data.put("message", "La encuesta buscada, no se encuentra en la db");
                 }
-            }else{
+            } else {
                 statusCode = Constants.NOT_FOUND_STATUS_CODE;
-                data.put("message", "La encuesta buscada no se encontro");
+                data.put("message", "No se encontraron encuestas!");
             }
-        }catch(Exception e){
+
+        } catch (Exception e) {
             statusCode = Constants.INTERNAL_SERVER_ERROR_STATUS_CODE;
+            data.put("message", "Error al buscar la encuesta");
             log.error("deleteSurvey failed", e);
         }
         serviceResponseDto.setStatusCode(statusCode);
         serviceResponseDto.setData(data);
         return serviceResponseDto;
     }
-
-
-
 
     public void create(EncuestaDto surveyDto){
         // Validar el TipoEncuesta que se enviara a Encuesta
@@ -348,29 +351,166 @@ public class EncuestaServiceImpl implements IEncuestaService {
     @Override
     public byte[] generarReporteCsvEncuesta(String surveyId) throws IOException {
         Encuesta encuesta = surveyRepository.getEncuestaForId(surveyId);
-
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try (CSVWriter csvWriter = new CSVWriter(new OutputStreamWriter(outputStream))) {
-            // Escribir encabezados del CSV
             String[] encabezados = {"ID de Pregunta", "Pregunta", "ID de Respuesta", "Respuesta", "ID de Persona"};
             csvWriter.writeNext(encabezados);
-            // Iterar a través de las preguntas y respuestas de la encuesta
-            for (PreguntaE pregunta : encuesta.getPreguntas()) {
-                for (Respuesta respuesta : pregunta.getRespuestas()) {
+            encuesta.getPreguntas().stream().forEach(preguntaE -> {
+                preguntaE.getRespuestas().stream().forEach(respuesta -> {
                     String[] fila = {
-                            String.valueOf(pregunta.getIdPregunta()),
-                            pregunta.getDsPregunta(),
+                            String.valueOf(preguntaE.getIdPregunta()),
+                            preguntaE.getDsPregunta(),
                             String.valueOf(respuesta.getIdRespuesta()),
                             respuesta.getRespuesta(),
                             String.valueOf(respuesta.getPersonaEncuesta().getIdPersonaEncuesta())
                     };
                     csvWriter.writeNext(fila);
-                }
-            }
+                });
+            });
         }
         return outputStream.toByteArray();
     }
 
+    public ServiceResponseDto generarReporteCsvEncuesta2(String idSurvey) throws IOException {
+        return null;
+    }
+
+//    @Override
+//    public ServiceResponseDto generarReporteCsvEncuesta2(String idSurvey) throws IOException {
+//        int statusCode = Constants.SUCCESS_STATUS_CODE;
+//        Map<String, Object> data = new LinkedHashMap<String, Object>();
+//        ServiceResponseDto serviceResponseDto = new ServiceResponseDto();
+//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//        CSVWriter csvWriter = null;
+//        try {
+//            List<Object[]> response;
+//            Encuesta encuesta = surveyRepository.findById(idSurvey).orElse(null);
+//            csvWriter = new CSVWriter(new OutputStreamWriter(outputStream));
+//            if(encuesta != null) {
+//                if (encuesta.getTipoEncuesta().getIdTipoEncuesta().equals("2")) {
+//                    String[] encabezados = {"Curso", "Fecha Inicio", "Fecha Fin", "Proveedor", "Pregunta", "Respuesta", "Nombre"};
+//                    csvWriter.writeNext(encabezados);
+//                    for (PreguntaE pregunta : encuesta.getPreguntas()) {
+//                        for (Respuesta respuesta : pregunta.getRespuestas()) {
+//                            response = answerRespository.reportDataSatisfation(respuesta.getIdRespuesta());
+//                            // campos que trae la consulta personalizada en la respuesta, falta crear la entidad Curso y Oferta para que
+//                            // este toda la info que se relaciona abajo
+//                            String[] fila = {
+//                                    response.get(0)[0].toString(),
+//                                    response.get(0)[1].toString(),
+//                                    response.get(0)[2].toString(),
+//                                    response.get(0)[3].toString(),
+//                                    response.get(0)[4].toString(),
+//                                    response.get(0)[5].toString(),
+//                                    response.get(0)[6].toString() + " " + response.get(0)[7].toString()
+//                            };
+//                            csvWriter.writeNext(fila);
+//                        }
+//                    }
+//                    data.put("title", encuesta.getNombreEncuesta());
+//                } else {
+//                    String[] encabezados = {"Pregunta", "Respuesta", "Nombre"};
+//                    csvWriter.writeNext(encabezados);
+//                    for (PreguntaE pregunta : encuesta.getPreguntas()) {
+//                        for (Respuesta respuesta : pregunta.getRespuestas()) {
+//                            response = answerRespository.reportDataPersonalized(respuesta.getIdRespuesta());
+//                            String[] fila = {
+//                                    response.get(0)[0].toString(),
+//                                    response.get(0)[1].toString(),
+//                                    response.get(0)[2].toString() + " " + response.get(0)[3].toString()
+//                            };
+//                            csvWriter.writeNext(fila);
+//                        }
+//                    }
+//                    data.put("title", encuesta.getNombreEncuesta());
+//                }
+//            }
+//            else{
+//                statusCode = Constants.NO_CONTENT_STATUS_CODE;
+//                data.put(Constants.MESSAGE, "No se encuentra la encuesta");
+//            }
+//        } finally {
+//            if (csvWriter != null) {
+//                try {
+//                    csvWriter.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        data.put("objects", outputStream.toByteArray());
+//        serviceResponseDto.setStatusCode(statusCode);
+//        serviceResponseDto.setData(data);
+//        return serviceResponseDto;
+//    }
+
+    public ServiceResponseDto activateSurvey(String idSurvey){
+        int statusCode = Constants.SUCCESS_STATUS_CODE;
+        Map<String, Object> data = new LinkedHashMap<String, Object>();
+        try {
+            Encuesta survey = surveyRepository.findById(idSurvey).orElse(null);
+            if(survey != null){
+                if(survey.getTipoEncuesta().getIdTipoEncuesta().equals("2"))
+                {
+                    Encuesta activeSurvey = surveyRepository.findByTipoEncuestaEsEncuesta("2","Activada").orElse(null);
+                    if(activeSurvey == null) {
+                        survey.setEsEncuesta("Activada");
+                        surveyRepository.save(survey);
+                        data.put(Constants.MESSAGE, "Se activa encuesta de satisfaccion!");
+                    } else {
+                        statusCode = Constants.CONFLICT_WITH_CURRENT_STATE;
+                        data.put(Constants.MESSAGE, "Ya existe una encuesta de satisfaccion activada");
+                    }
+                }
+                else{
+                    survey.setEsEncuesta("Activada");
+                    surveyRepository.save(survey);
+                    data.put(Constants.MESSAGE, "Se activa la encuesta personalizada");
+                }
+            }
+            else{
+                statusCode = Constants.NO_CONTENT_STATUS_CODE;
+                data.put(Constants.MESSAGE, "No se pudo encontrar la encuesta");
+            }
+        } catch (Exception e) {
+            statusCode = Constants.INTERNAL_SERVER_ERROR_STATUS_CODE;
+            data.put(Constants.MESSAGE, "error al activar encuesta");
+            log.error("activateSurvey failed", e);
+        }
+        ServiceResponseDto serviceResponseDto = new ServiceResponseDto();
+        serviceResponseDto.setStatusCode(statusCode);
+        serviceResponseDto.setData(data);
+        return serviceResponseDto;
+    }
+
+    @Override
+    public ServiceResponseDto validateAssignSurveyToPerson(String idSurvey) {
+        int statusCode = Constants.SUCCESS_STATUS_CODE;
+        Map<String, Object> data = new LinkedHashMap<String, Object>();
+        try {
+            if (surveyRepository.existsById(idSurvey)) {
+                if (personaEncuestaRespository.findSurveyPersonByIdSurvey(idSurvey).size() == 0) {
+                    data.put("message", "Se puede actualizar la encuesta");
+                    data.put("canUpdate", true);
+                } else {
+                    statusCode = Constants.SUCCESS_STATUS_CODE;
+                    data.put("message", "No se puede actualizar la encuesta");
+                    data.put("canUpdate", false);
+                }
+            } else {
+                statusCode = Constants.SUCCESS_STATUS_CODE;
+                data.put("message", "No se encuentra la encuesta");
+            }
+        } catch (Exception e) {
+            statusCode = Constants.INTERNAL_SERVER_ERROR_STATUS_CODE;
+            data.put("message", "error al validar");
+            log.error("validateAssignSurveyToPerson failed", e);
+        }
+        ServiceResponseDto serviceResponseDto = new ServiceResponseDto();
+        serviceResponseDto.setStatusCode(statusCode);
+        serviceResponseDto.setData(data);
+        return serviceResponseDto;
+    }
 
     @Override
     public ServiceResponseDto updateSurvey(EncuestaDto encuestaDto) {
@@ -379,11 +519,6 @@ public class EncuestaServiceImpl implements IEncuestaService {
 
     @Override
     public ServiceResponseDto findSurveyById(String idEncuesta) {
-        return null;
-    }
-
-    @Override
-    public ServiceResponseDto activateSurvey(String idEncuesta) {
         return null;
     }
 

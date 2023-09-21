@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Api(tags = "Encuestas: Rutas Disponibles")
 @RestController
@@ -132,10 +133,46 @@ public class EncuestaController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType("text/csv"));
         headers.setContentDispositionFormData("attachment", "reporte_encuesta.csv");
-
-        return new ResponseEntity<>(informeCsv, headers, HttpStatus.OK);
+        ResponseEntity response = new ResponseEntity<>(informeCsv, headers, HttpStatus.OK);
+        return response;
+//        return new ResponseEntity<>(informeCsv, headers, HttpStatus.OK);
     }
 
+    @GetMapping("/reporte-csv/{encuestaId}")
+    @ApiOperation(value = "Este metodo aun no funciona porque faltan las entidades y tablas con datos en el SQL para Curso y Oferta para finalizarlo")
+    public ResponseEntity<byte[]> getCsvReport(@PathVariable String encuestaId) throws IOException {
+        ServiceResponseDto serviceResponseDto = encuestaService.generarReporteCsvEncuesta2(encuestaId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("text/csv"));
+        headers.setContentDispositionFormData("attachment", "reporte_"
+                + serviceResponseDto.getData().get("title") + ".csv");
+        Map<String, Object> data = (Map<String, Object>) serviceResponseDto.getData();
+//        Map<String, Object> data = (Map<String, Object>) controllerDto.getBody().get("data");
+        ResponseEntity response = new ResponseEntity<>(data.get("objects"), headers, HttpStatus.OK);
+        return response;
+    }
 
+    @ApiOperation(value = "Activacion de una encuesta por su ID")
+    @PutMapping("/activate-survey/{idSurvey}")
+    public ResponseEntity<ControllerDto> activateSurvey(@PathVariable(name = "idSurvey") String idSurvey){
+        ServiceResponseDto serviceResponseDto = encuestaService.activateSurvey(idSurvey);
+        ControllerDto controllerDto = new ControllerDto();
+        controllerDto.setStatusCode(serviceResponseDto.getStatusCode());
+        controllerDto.setBody(serviceResponseDto.getStatusCode(), serviceResponseDto.getData(), true);
+        ResponseEntity<ControllerDto> response = ResponseEntity.status(HttpStatus.OK).body(controllerDto);
+        return response;
+    }
+
+    @ApiOperation(value = "Al actualizar una encuesta valida que no halla una persona asignada a ella")
+    @GetMapping("/validateAssign/{idSurvey}")
+    public ResponseEntity<ControllerDto> validateAssignSurveyToPerson(
+            @PathVariable(name = "idSurvey") String idSurvey) {
+        ServiceResponseDto serviceResponseDto = encuestaService.validateAssignSurveyToPerson(idSurvey);
+        ControllerDto controllerDto = new ControllerDto();
+        controllerDto.setStatusCode(serviceResponseDto.getStatusCode());
+        controllerDto.setBody(serviceResponseDto.getStatusCode(), serviceResponseDto.getData(), true);
+        ResponseEntity<ControllerDto> response = ResponseEntity.status(HttpStatus.OK).body(controllerDto);
+        return response;
+    }
 
 }
