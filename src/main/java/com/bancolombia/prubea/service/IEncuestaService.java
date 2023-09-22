@@ -9,7 +9,6 @@ public interface IEncuestaService {
     ServiceResponseDto createSurvey(EncuestaDto encuestaDto);
     ServiceResponseDto createSurveyWithAnswers(EncuestaDto encuestaDto);
     ServiceResponseDto listSurveyWithoutQuestions(int page, int size, String sortBy);
-    ServiceResponseDto findSurveyById(String idEncuesta);
     ServiceResponseDto getSurveyWithQuestions(String idSurvey);
     ServiceResponseDto getSurveyWithQuestionsAndAnswers(String idSurvey);
     ServiceResponseDto updateSurvey(EncuestaDto encuestaDto);

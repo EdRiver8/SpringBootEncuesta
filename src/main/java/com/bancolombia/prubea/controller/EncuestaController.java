@@ -175,4 +175,15 @@ public class EncuestaController {
         return response;
     }
 
+    @ApiOperation(value = "Actualización de una encuesta")
+    @PostMapping("/update-survey")
+    public ResponseEntity<ControllerDto> updateSurvey(@RequestBody EncuestaDto surveyDto) {
+        ServiceResponseDto serviceResponseDto = encuestaService.updateSurvey(surveyDto);
+        ControllerDto controllerDto = new ControllerDto();
+        controllerDto.setStatusCode(serviceResponseDto.getStatusCode());
+        controllerDto.setBody(serviceResponseDto.getStatusCode(), serviceResponseDto.getData(), true);
+        ResponseEntity<ControllerDto> response = ResponseEntity.status(HttpStatus.OK).body(controllerDto);
+        return response;
+    }
+
 }
